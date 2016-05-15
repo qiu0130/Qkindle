@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 # Kindle 在线分享网站
 
@@ -6,11 +5,12 @@
 
 
 ### 环境
-+　`Python3.5.1 + Tornado4.2.1`
+
+> `Python3.5.1 + Tornado4.2.1`
 
 ### 其他
+
 The MIT License
 
-=======
-# kindle.push build
->>>>>>> db2ad697a71bff96a4e7e29d868bad867c1506f7
+
+
