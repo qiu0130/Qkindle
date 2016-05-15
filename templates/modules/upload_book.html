@@ -1,0 +1,55 @@
+
+<div class="col-sm-3 col-lg-3">
+	<div class="dash-unit">
+		<dtitle>{{ book["tag"] }} </dtitle>
+		<hr>
+		<div class="thumbnail">
+			<img src="{{ static_url(book["img"]) }}" alt="Marcel Newman"> <!-- class="img-circle" -->
+		</div><!-- /thumbnail -->
+
+		<h1>{{ book["name"] }}</h1>
+		<h3>{{ book["author"] }}</h3>
+
+
+        <div class="cont">
+            <a href="#myModal1" role="button" class="btnnew" data-toggle="modal">上传图书</a>
+        </div>
+
+    </div>
+
+		   <!-- Modal -->
+			  <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				   aria-hidden="true">
+			    <div class="modal-dialog">
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+			          <h4 class="modal-title"> {{ book["name"] }}</h4>
+			        </div>
+			        <div class="modal-body">
+			          　...
+			        </div>
+
+			        <div class="modal-footer">
+                        <form enctype="multipart/form-data" method="post" action="/upload/book/{{ book["id"] }}">
+                            {% module xsrf_form_html() %}
+                            <input type="file" name="book_file" class="btn btn-default"/>
+						    <input type="hidden" name = "uri" value="{{ request.uri }}" >
+						<button onclick="btn_click()"  class="btn btn-default" type="submit"> 上传 </button>
+						<script type="text/javascript">
+							function btn_click() {
+								alert("上传成功！");
+							}
+						</script>
+
+
+						</form>
+			       　</div>
+
+			      </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			  </div><!-- /.modal -->
+
+</div>
+
+

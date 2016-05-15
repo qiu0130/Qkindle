@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+
+{% block head %}
+
+{% end %}
+
+
+
+{% block body %}
+
+     <div class="container">
+
+	  <!-- FIRST ROW OF BLOCKS -->
+        <div class="row">
+			<div class="col-sm-3 col-lg-3">
+			    <div class="half-unit">
+	      		    <dtitle>访问人数</dtitle>
+	      		    <hr>
+	      		    <div class="cont">
+					    <p>
+							<img src="{{ static_url("assets/img/up.png") }}"  alt=""> <bold>{{ visited }}</bold>
+
+						</p>
+				    </div>
+			    </div>
+            </div>
+
+			{% block top_line %}
+
+            {% end %}
+		</div>
+
+
+        <div class="row">
+            <div class="col-sm-3 col-lg-3">
+      		    <div class="dash-corner">
+      		        <dtitle> 最新浏览记录　</dtitle>
+      		        <hr>
+      		        <div class="framemail">
+    			        <div class="window">
+			            <ul class="mail">
+							{% for user in online %}
+			                <li>
+			                    <i class="unread"></i>
+			                    <img class="avatar" src="{{ static_url(user["photo"]) }}" alt="avatar">
+			                    <p class="sender"> <a href="{{ user["url"] }}"> {{ user["username"] }} </a> </p>
+			                    <p class="message"> {{ user["loginAt"] }}</p>
+			                    <!--<div class="actions">-->
+			                        <!--<a><img src="http://png-1.findicons.com/files//icons/2232/wireframe_mono/16/undo.png" alt="reply"></a>-->
+			                        <!--<a><img src="http://png-1.findicons.com/files//icons/2232/wireframe_mono/16/star_fav.png" alt="favourite"></a>-->
+			                        <!--<a><img src="http://png-4.findicons.com/files//icons/2232/wireframe_mono/16/tag.png" alt="label"></a>-->
+			                        <!--<a><img src="http://png-4.findicons.com/files//icons/2232/wireframe_mono/16/trash.png" alt="delete"></a>-->
+			                    <!--</div>-->
+			                </li>
+							{% end %}
+
+			            </ul>
+    			        </div>
+			        </div>
+					<hr>
+					{% for tag in tags %}
+					<div class="cont">
+						{% if mode  == "main" %}
+							<a href="/{{ mode }}/{{ tag["uri"] }}" role="button" class="btnnew" data-toggle="modal">
+						{% else %}
+							<a href="/{{ mode }}/{{ tag["uri"] }}/1" role="button" class="btnnew" data-toggle="modal">
+						{% end %}
+
+
+						{{
+						tag["name"]
+						}} </a>
+					</div>
+					{% end %}
+					<hr>
+
+		        </div><!-- /dash-unit -->
+            </div><!-- /span3 -->
+
+           {% block down_line %}
+            {% end %}
+
+        </div><!-- /row -->
+    </div> <!-- /container -->
+
+
+
+
+{% block page %}
+
+{% end %}
+
+
+
+{% end %}
+

@@ -1,0 +1,38 @@
+<html>
+<head>
+<script type="text/javascript" language="javascript" src="http://hulupi.qiniudn.com/jquery-1.7.2.min.js"></script>
+</head>
+<!--<select name="" id="ss" onchange="gotoPage();">-->
+<!--<option value="1"　selected = "selected">a1</option>-->
+<!--<option value="2" >b2</option>-->
+<!--<option value="3" >c3</option>-->
+<!--<option value="4" >d4</option>-->
+<!--<option value="5" >e5</option>-->
+<!--</select>-->
+<!--<script type="text/javascript" >-->
+<!--function gotoPage(){-->
+<!--//获取选中下拉框的值-->
+<!--var page = $("#ss option:selected").val();-->
+<!--document.location = "http://localhost:8888" + "/push/" + "recent/" + page;-->
+<!--}-->
+<!--</script>-->
+
+<select name = "" id = "pids" onchange="pageChange();">
+  <option value="1"	selected = "selected">1</option>
+	<!--{% for i in range(2, page_count) %}-->
+
+    <option value="2"> 2 </option>
+	<!--{% end %}-->
+</select>
+
+<script type="text/javascript" language="javascript">
+    function pageChange(){
+	//获取选中下拉框的值
+	var page = $("#pids option:selected").val();
+	document.location = "{{ request.protocol + "://" + request.host }} + "/push/" + "{{ cur_tag }}/" + page;
+}
+
+</script>
+
+
+</html>

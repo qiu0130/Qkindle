@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> kindle管理员　</title>
+
+   <style>
+body{ TEXT-ALIGN: center; }
+#center{ MARGIN-RIGHT: auto;
+MARGIN-LEFT: auto;
+height:auto;
+background:#F00;
+width:400px;
+vertical-align:middle;
+line-height:200px;
+}
+</style>
+
+
+</head>
+<body>
+    <!--<div style="margin:0 auto;">-->
+        <h1>管理员操作</h1>
+        <form action="/admin/book" method="post" enctype="multipart/form-data">
+           <h2> 添加图书 </h2>
+            <p>书&nbsp;&nbsp;&nbsp;名: <input type="text" name = "name"> </p>
+            <p>作&nbsp;&nbsp;&nbsp;者: <input type="text" name = "author"> </p>
+            <p>标&nbsp;&nbsp;&nbsp;签: <input type="text" name = "tag"> </p>
+            <p>推送<input type="radio" name = "mode" value="push">
+                上传 <input type="radio" name="mode" value="upload">
+            </p>
+
+                <h2> 图书封面</h2>
+                <p><input id = "upload" type="file" name = "img"></p>
+                <p><img id = "pic" src = ""> </p>
+                 <script>
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                document.getElementById('pic').setAttribute('src', e.target.result);
+                };
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    reader.readAsDataURL(input.files[0]);
+            }
+            };
+            document.getElementById('upload').onchange = function(){
+                readURL(this);
+            };
+            </script>
+                <button type="submit"> 开始上传　</button>
+                 {% module xsrf_form_html() %}
+        </form>
+
+        <form action="/admin/tag" method="post">
+            <h2>添加类型</h2>
+            <p>uri:<input type="text" name = "uri"> </p>
+            <p>name: <input type="text" name = "tag_name"> </p>
+            <button type="submit"> 确认添加　</button>
+            {% module xsrf_form_html() %}
+        </form>
+
+        <form action="/admin/coll" method="post">
+             <h2> 清除集合 </h2>
+            <p>集&nbsp;&nbsp;&nbsp;合: <input type="text" name = "collection"> </p>
+            <button type="submit"> 确认清除　</button>
+            {% module xsrf_form_html() %}
+        </form>
+    <!--</div>-->
+</body>
+</html>

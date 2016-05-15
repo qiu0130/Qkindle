@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+
+{% block head %}
+<link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
+ <link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
+ <link href="{{ static_url("assets/css/register.css") }}" rel="stylesheet">
+
+
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+{% end %}
+
+
+{% block body %}
+
+ <div class="container">
+        <div class="row">
+
+        	<div class="col-lg-6">
+
+        		<div class="register-info-wraper">
+        			<div id="register-info">
+        				<div class="cont2">
+        					<div class="thumbnail">
+								<img src="{{ static_url(user["photo"]) }}" alt="Marcel Newman"
+                                class="img-circle">
+							</div><!-- /thumbnail -->
+							<h2> {{ user["username"] }} </h2>
+                            <br>
+        				</div>
+        				<div class="row">
+
+        					<div class="col-lg-username" >
+        						<div class="cont3">
+        						<p><ok>累计推送:</ok> {{ user["push_count"] }}</p>
+
+                                    <p><ok>累计上传:</ok> {{ user["upload_count"] }} </p>
+        						<p><ok>验证邮箱:</ok> {{ user["email"] }} </p>
+        						<p><ok>Kindle邮箱:</ok> {{ user["kindle_email"] }} </p>
+        						</div>
+        					</div>
+        				</div><!-- /inner row -->
+                        <br>
+                        <br>
+						<hr>
+						<div class="cont2">
+							<h2>Your Info </h2>
+						</div>
+						<br>
+
+
+        			</div>
+        		</div>
+
+        	</div>
+
+        	<div class="col-sm-6 col-lg-6">
+        		<div id="register-wraper">
+        		    <form id="register-form" class="form" method="post" action="/username/{{ user["id"] }}">
+        		        <legend>账户修改</legend>
+
+        		        <div class="body">
+
+        		        	<label>用户ID</label>
+        		        	<input class="input-huge" type="text" name = "username">
+        		        	<!-- email -->
+        		        	<label>验证邮箱</label>
+        		        	<input class="input-huge" type="text" name = "email">
+                            <label>推送邮箱</label>
+        		        	<input class="input-huge" type="text" name = "kindle_email">
+        		        	<!-- password -->
+        		        	<label>密码</label>
+        		        	<input class="input-huge" type="text" name = "password">
+                             {% module xsrf_form_html() %}
+        		        </div>
+
+        		        <div class="footer">
+        		            <!--<label class="checkbox inline">-->
+        		                <!--<input type="checkbox" id="inlineCheckbox1" value="option1"> I agree with the terms &amp; conditions-->
+        		            <!--</label>-->
+        		            <button type="submit" class="btn btn-success">更改</button>
+        		        </div>
+        		    </form>
+        		</div>
+        	</div>
+
+        </div>
+    </div>
+
+
+{% end %}

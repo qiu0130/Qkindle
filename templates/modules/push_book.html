@@ -1,0 +1,56 @@
+
+<div class="col-sm-3 col-lg-3">
+	<div class="dash-unit">
+		<dtitle>{{ book["tag"] }} </dtitle>
+		<hr>
+		<div class="thumbnail">
+			<img src="{{ static_url(book["img"]) }}" alt="Marcel Newman"> <!-- class="img-circle" -->
+		</div><!-- /thumbnail -->
+
+				<h1>{{ book["name"] }}</h1>
+				<h3>{{ book["author"] }}</h3>
+
+		 			<div class="cont">
+		                <a href="#myModal" role="button" class="btnnew" data-toggle="modal">
+							推送至kindle</a>
+		            </div>
+	</div>
+
+		   <!-- Modal -->
+			  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+			          <h4 class="modal-title">{{ book["name"] }}</h4>
+			        </div>
+			        <div class="modal-body">
+						...
+			        </div>
+
+			        <div class="modal-footer">
+						<form method="post" action = "/push/book/{{ book["id"] }}">
+
+							 {% module xsrf_form_html() %}
+
+					     		<input name = "uri" type="hidden" value="{{ 	request.uri }}">
+						　　　<button class="btn btn-default" type="submit" onclick = "btn_click()"> 确认推送 </button>
+			          <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+
+
+						<script type="text/javascript">
+							function btn_click(){
+								alert("推送成功");
+							}
+						</script>
+							</form>
+			       　 </div>
+
+			      </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			  </div><!-- /.modal -->
+
+
+</div>
+
+
