@@ -1,6 +1,9 @@
 
 
-![](https://travis-ci.org/qiu0130/kindle.push.svg?branch=master)
+![Build Status](https://travis-ci.org/qiu0130/kindle.push.svg?branch=master)
+
+![Coverage Status](https://travis-ci.org/qiu0130/badge.svg?branch=master)
+
 
 # Kindle 在线分享网站
 
