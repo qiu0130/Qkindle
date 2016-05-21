@@ -1,52 +1,14 @@
-{% extends "main_base.html" %}
+{% extends "subbase.html" %}
 
-{% block head %}
-
-<style type="text/css">
-      body {
-        padding-top: 80px;
-      }
-    </style>
-
- <link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
- <link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
- <link href="{{ static_url("assets/css/flexslider.css") }}" rel="stylesheet">
-<script type="text/javascript" language="javascript" src="{{ static_url("assets/js/jquery-1.7.2.min.js") }}"></script>
-
-
-{% end %}
-
-		{% block top_line %}
-			{% module PartLine(upload_line) %}
+		{% block part %}
+			{% module PartLine(upload_title) %}
 		{% end %}
 
-		{% block down_line %}
+		{% block book %}
 			{% for book in upload_books %}
 				{% module UploadBook(book) %}
 			{% end %}
 		{% end %}
 
 
-{% block page %}
-
-
-
-当前页面
-<select name="" id="pid" onchange="gotoPage();">
-<option value="1"　selected = "selected">1</option>
-   {% for i in range(2, page_count) %}
-   		<option value = "{{ i }}"> {{ i }} </option>
-    {% end %}
-</select>
-<script type="text/javascript" >
-
-function gotoPage(){
-//获取选中下拉框的值
-var page = $("#pid option:selected").val();
-	document.location = "{{ request.protocol + "://" + request.host }}" + "/push/" + "{{ tag }}/" + page;
-}
-</script>
-
-
-{% end %}
 

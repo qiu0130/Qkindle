@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
+<link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
+<link href="{{ static_url("assets/css/flexslider.css") }}" rel="stylesheet">
+
+
+<style type="text/css">
+      body {
+        padding-top: 80px;
+      }
+</style>
+
+	<script type="text/javascript">
+
+				function push_check() {
+					{% if not current_user %}
+			 			alert("请登陆！");
+			 			document.location = "{{ request.protocol + "://" + request.host }}" + "/auth/login";
+			 		{% else %}
+
+			 			document.getElementById('submit_form').submit();
+			 			alert("成功！");
+					{% end %}
+				}
+				function upload_check() {
+					{% if not current_user %}
+			 			alert("请登陆！");
+			 			document.location = "{{ request.protocol + "://" + request.host }}" + "/auth/login";
+					{% end %}
+				}
+
+
+				function validate_fileupload(target) {
+
+ 					var uploadedFile = document.getElementById('upload');
+    				var fileSize = uploadedFile.files[0].size;
+    				var size = fileSize / 1024;
+    				if (size > 2000) {
+    	 				alert("图书不能大于2M");
+    					target.value = "";
+    	 				return ;
+    				}
+    				var file_type = new Array("pdf","mobi","azw");
+    				var file_name = target.value.split('.').pop();
+
+    				if (file_type[0] != file_name && file_type[1] != file_name && file_type[2] != file_name) {
+    					alert("图书仅支持.pdf、.mobi、.azw格式");
+    		 			target.value = "";
+    		  			return;
+    				}
+				}
+			</script>
+{% end %}
+
+
+{% block body %}
+
+     <div class="container">
+
+	  <!-- FIRST ROW OF BLOCKS -->
+        <div class="row">
+
+			<div class="col-sm-3 col-lg-3">
+			    <div class="half-unit">
+	      		    <dtitle> 访问人数 </dtitle>
+	      		    <hr>
+	      		    <div class="cont">
+					    <p>
+							<img src="{{ static_url("assets/img/up.png") }}"  alt=""> <bold>{{ visited }}</bold>
+						</p>
+				    </div>
+
+
+			    </div>
+            </div>
+
+			{% block part %}
+
+            {% end %}
+		</div>
+
+
+        <div class="row">
+            <div class="col-sm-3 col-lg-3">
+      		    <div class="dash-corner">
+      		        <dtitle> 最新浏览记录　</dtitle>
+      		        <hr>
+      		        <div class="framemail">
+    			        <div class="window">
+			            <ul class="mail">
+							{% for user in online %}
+			                <li>
+			                    <i class="unread"></i>
+			                    <img class="avatar" src="{{ static_url(user["photo"]) }}" alt="avatar">
+			                    <p class="sender"> <a href="{{ user["url"] }}"> {{ user["username"] }} </a> </p>
+			                    <p class="message"> {{ user["loginAt"] }}</p>
+			                </li>
+							{% end %}
+
+			            </ul>
+    			        </div>
+			        </div>
+					<hr>
+					{% for tag in tags %}
+					<div class="cont">
+						{% if mode  == "main" %}
+						<!-- 啰嗦鬼　-->
+							<a href="/{{ mode }}/{{ tag["index"] }}" role="button" class="btnnew"
+						data-toggle="modal">
+						{% else %}
+							<a href="/{{ mode }}/{{ tag["index"] }}/1" role="button" class="btnnew"
+						data-toggle="modal">
+						{% end %}
+
+							 {{ tag["name"] }}
+						</a>
+					</div>
+					{% end %}
+					<hr>
+
+		        </div><!-- /dash-unit -->
+            </div><!-- /span3 -->
+
+           {% block book %}
+
+            {% end %}
+
+        </div><!-- /row -->
+    </div> <!-- /container -->
+
+
+{% end %}
+
+
+
+
+{% block footer %}
+
+{% if mode != "main" %}
+<div id="curPage" align="center">
+	<!--<button>上一页</button>-->
+
+<select onchange="location = this.options[this.selectedIndex].value;">
+
+	<option value = "{{ request.protocol + "://" + request.host  + "/push/" + index + "/1"  }}"> 1 </option>
+   {% for i in range(2, page_count) %}
+   		<option value = "{{ request.protocol + "://" + request.host  + "/push/" + index + "/" + str(i) }}"> {{ i }}
+	</option>
+    {% end %}
+</select>
+	<!--<button > 下一页 </button>-->
+
+
+</div>
+{% end %}
+
+
+<div id="footerwrap">
+      	<footer class="clearfix"></footer>
+      	<div class="container">
+      		<div class="row">
+      			<div class="col-sm-12 col-lg-12">
+      			<p><img src="{{ static_url("assets/img/logo.png") }}" alt=""></p>
+      			<p>For you a thousand - Copyright 2016</p>
+      			</div>
+      		</div><!-- /row -->
+      	</div><!-- /container -->
+	</div><!-- /footerwrap -->
+
+{% end %}
+
+
+

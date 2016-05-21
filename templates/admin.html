@@ -24,6 +24,7 @@ line-height:200px;
         <form action="/admin/book" method="post" enctype="multipart/form-data">
            <h2> 添加图书 </h2>
             <p>书&nbsp;&nbsp;&nbsp;名: <input type="text" name = "name"> </p>
+             <p>格&nbsp;&nbsp;&nbsp;式: <input type="text" name = "type"> </p>
             <p>作&nbsp;&nbsp;&nbsp;者: <input type="text" name = "author"> </p>
             <p>标&nbsp;&nbsp;&nbsp;签: <input type="text" name = "tag"> </p>
             <p>推送<input type="radio" name = "mode" value="push">
@@ -53,8 +54,8 @@ line-height:200px;
 
         <form action="/admin/tag" method="post">
             <h2>添加类型</h2>
-            <p>uri:<input type="text" name = "uri"> </p>
-            <p>name: <input type="text" name = "tag_name"> </p>
+            <p>Index: <input type="text" name = "index"> </p>
+            <p>Name: <input type="text" name = "name"> </p>
             <button type="submit"> 确认添加　</button>
             {% module xsrf_form_html() %}
         </form>

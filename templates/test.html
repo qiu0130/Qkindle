@@ -1,38 +1,51 @@
-<html>
+<!doctype html public "-//w3c//dtd xhtml 1.0 transitional//en" "http://www.w3.org/tr/xhtml1/dtd/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<script type="text/javascript" language="javascript" src="http://hulupi.qiniudn.com/jquery-1.7.2.min.js"></script>
-</head>
-<!--<select name="" id="ss" onchange="gotoPage();">-->
-<!--<option value="1"ã€€selected = "selected">a1</option>-->
-<!--<option value="2" >b2</option>-->
-<!--<option value="3" >c3</option>-->
-<!--<option value="4" >d4</option>-->
-<!--<option value="5" >e5</option>-->
-<!--</select>-->
-<!--<script type="text/javascript" >-->
-<!--function gotoPage(){-->
-<!--//èŽ·å–é€‰ä¸­ä¸‹æ‹‰æ¡†çš„å€¼-->
-<!--var page = $("#ss option:selected").val();-->
-<!--document.location = "http://localhost:8888" + "/push/" + "recent/" + page;-->
-<!--}-->
-<!--</script>-->
+<meta http-equiv="content-type" content="text/html; charset=gb2312" />
+<title>js´úÂë</title>
+<script type="text/javascript">
 
-<select name = "" id = "pids" onchange="pageChange();">
-  <option value="1"	selected = "selected">1</option>
-	<!--{% for i in range(2, page_count) %}-->
+function validate_fileupload(target) {
 
-    <option value="2"> 2 </option>
-	<!--{% end %}-->
-</select>
 
-<script type="text/javascript" language="javascript">
-    function pageChange(){
-	//èŽ·å–é€‰ä¸­ä¸‹æ‹‰æ¡†çš„å€¼
-	var page = $("#pids option:selected").val();
-	document.location = "{{ request.protocol + "://" + request.host }} + "/push/" + "{{ cur_tag }}/" + page;
+ var uploadedFile = document.getElementById('upload');
+    var fileSize = uploadedFile.files[0].size;
+    var size = fileSize / 1024;
+    if (size > 2000) {
+    	 alert("Í¼Êé²»ÄÜ´óÓÚ2M");
+    	target.value = "";
+    	 return ;
+    }
+    var file_type = new Array("pdf","mobi","azw");
+    var file_name = target.value.split('.').pop();
+
+
+    if (file_type[0] == file_name || file_type[1] == file_name || file_type[2] == file_name) {
+    		  alert("ÉÏ´«³É¹¦£¡");
+    		  return;
+    } else {
+
+    		alert("Í¼Êé½öÖ§³Ö.pdf¡¢.mobi¡¢.azw¸ñÊ½");
+    		 target.value = "";
+    		  return;
+    }
+
 }
-
 </script>
 
 
+</head>
+<body>
+
+	<input type="file" id = "upload" name="fileUpload" onchange="validate_fileupload(this);">
+
+
+<select onchange="location = this.options[this.selectedIndex].value;">
+    <option>Please select</option>
+    <option value="http://www.apple.com/">Apple</option>
+    <option value="http://www.bbc.com">BBC</option>
+    <option value="http://www.facebook.com">Facebook</option>
+</select>?
+
+</body>
 </html>

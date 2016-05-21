@@ -1,32 +1,16 @@
-{% extends "main_base.html" %}
+{% extends "subbase.html" %}
 
-
-	{% block head %}
-		<style type="text/css">
-      		body {
-        	padding-top: 80px;
-      		}
-    	</style>
-
- 	<link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
- 	<link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
- 	<link href="{{ static_url("assets/css/flexslider.css") }}" rel="stylesheet">
-
+	{% block part %}
+		{% module PartLine(push_title) %}
 	{% end %}
 
-
-
-	{% block top_line %}
-		{% module PartLine(push_line) %}
-	{% end %}
-
-	{% block down_line %}
+	{% block book %}
 
 		{% for book in push_books %}
 				{% module PushBook(book) %}
 		{% end %}
 
-		{% module PartLine(upload_line) %}
+		{% module PartLine(upload_title) %}
 
 		{% for book in upload_books %}
 			{% module UploadBook(book) %}
@@ -35,4 +19,19 @@
 	{% end %}
 
 
+{% block footer %}
+
+<div id="footerwrap">
+      	<footer class="clearfix"></footer>
+      	<div class="container">
+      		<div class="row">
+      			<div class="col-sm-12 col-lg-12">
+      			<p><img src="{{ static_url("assets/img/logo.png") }}" alt=""></p>
+      			<p>for you a thousand - Copyright 2016</p>
+      			</div>
+
+      		</div><!-- /row -->
+      	</div><!-- /container -->
+	</div><!-- /footerwrap -->
+{% end %}
 

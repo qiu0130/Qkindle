@@ -1,13 +1,11 @@
 
 {% extends "base.html" %}
+
 {% block head %}
 
-
- <link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
- <link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
- <link href="{{ static_url("assets/css/register.css") }}" rel="stylesheet">
-
-
+<link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
+<link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
+<link href="{{ static_url("assets/css/register.css") }}" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -47,7 +45,7 @@
         		            <!--</label>-->
 							{% if error %}
 								<span style="color: red">Error: {{ error }}</span>
-								{% end %}
+							{% end %}
 							<br>
 							<br>
         		            <button type="submit" class="btn btn-success">注册</button>
