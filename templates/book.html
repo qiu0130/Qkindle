@@ -1,0 +1,159 @@
+{% extends "base.html"  %}
+
+
+{% block head %}
+
+<link href="{{ static_url("assets/css/register.css") }}" rel="stylesheet">
+<link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
+<link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
+<link href="{{ static_url("assets/css/flexslider.css") }}" rel="stylesheet">
+
+
+<style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+</style>
+
+
+	<script type="text/javascript">
+
+				function push_check() {
+					{% if not current_user %}
+			 			alert("请登陆！");
+			 			document.location = "{{ request.protocol + "://" + request.host }}" + "/auth/login";
+			 		{% else %}
+
+			 			document.getElementById('submit_form').submit();
+			 			alert("成功！");
+					{% end %}
+				}
+				function upload_check() {
+					{% if not current_user %}
+			 			alert("请登陆！");
+			 			document.location = "{{ request.protocol + "://" + request.host }}" + "/auth/login";
+					{% end %}
+				}
+
+
+				function validate_fileupload(target) {
+
+ 					var uploadedFile = document.getElementById('upload');
+    				var fileSize = uploadedFile.files[0].size;
+    				var size = fileSize / 1024;
+    				if (size > 2000) {
+    	 				alert("图书不能大于2M");
+    					target.value = "";
+    	 				return ;
+    				}
+    				var file_type = new Array("pdf","mobi","azw");
+    				var file_name = target.value.split('.').pop();
+
+    				if (file_type[0] != file_name && file_type[1] != file_name && file_type[2] != file_name) {
+    					alert("图书仅支持.pdf、.mobi、.azw格式");
+    		 			target.value = "";
+    		  			return;
+    				}
+				}
+			</script>
+
+{% end %}
+
+
+{% block body %}
+
+<div class="container">
+        <div class="row">
+        	<div class="col-lg-book">
+
+        		<div class="register-info-wraper">
+        			<div id="register-info">
+        				<div class="cont">
+        					<div class="thumbnail">
+							<img src="{{ static_url(book["img"]) }}" alt="Marcel Newman" >
+
+							</div><!-- /thumbnail -->
+								<h2> {{ book["name"] }} </h2>
+                                    <ok> 吴军　</ok>
+                            <br>
+
+                             <p>
+
+                                        这期音乐本都为音乐人今年的新作品，大部分曲目都独具特色。例如本期第2首Attitude to life是来自日本的乐队；
+                                第4首Hold the Sword虽然是来自芬兰乐队的作品，
+                                但是却加入大量的东方乐器；第6首Eye For An Eye
+
+                                  这期音乐本都为音乐人今年的新作品，大部分曲目都独具特色。例如本期第2首Attitude to life是来自日本的乐队；
+                                第4首Hold the Sword虽然是来自芬兰乐队的作品，
+                                但是却加入大量的东方乐器；第6首Eye For An Eye
+                                 和第11首Reborn In Time包含着大量荡气回肠的史诗旋律；
+                                第5首All I Got和第12首The Way to Freedom则是把古典美声唱法演绎的淋漓尽致。
+
+                            </p>
+        				    </div>
+                        <br>
+        				<hr>
+						<div class="cont2">
+
+
+                            <form id = "submit_form" method="post" action = "/push/book/{{ book["name"] }}">
+				            {% module xsrf_form_html() %}
+			                <input name = "uri" type="hidden" value="{{ request.uri }}">
+			                <button role="button" class="btnnew" data-toggle="modal" type="submit" onclick = "push_check();">
+				                推送至kindle
+                            </button>
+
+                            &emsp;&emsp;
+                           <a href="#myModal1" role="button" class="btnnew" data-toggle="modal" onclick="upload_check();">
+				            上传图书
+			                </a>
+
+
+						</div>
+
+						<hr>
+
+						<div class="cont2">
+							<h2> Book Info </h2>
+						</div>
+						<br>
+
+
+        			</div>
+        		</div>
+
+
+<!-- Modal -->
+			  <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				   aria-hidden="true">
+			    <div class="modal-dialog">
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+			          <h4 class="modal-title"> {{ book["name"] }} </h4>
+			        </div>
+
+			        <div class="modal-footer">
+                        <form enctype="multipart/form-data" method="post" action="">
+                            {% module xsrf_form_html() %}
+                            <input type="file" name = "avatar_file" id="avatar" onchange="validate_imgupload(this);"/>
+							<input type="hidden" name = "uri" value="{{ request.uri }}">
+						   <button class="btn btn-default" type="submit"> 上传 </button>
+
+						</form>
+			       　</div>
+
+			      </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			  </div><!-- /.modal -->
+
+
+
+
+			</div>
+
+        </div>
+
+    </div>
+
+{% end %}

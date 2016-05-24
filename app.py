@@ -20,11 +20,14 @@ import threading
 from tornado.httpserver import HTTPServer
 from tornado.options import define, options
 from PIL import Image
-from envelopes import Envelope
+
+from push import send_email_to_kindle
 
 
 define("port", help="run on port", default=8889, type=int)
+
 executor = concurrent.futures.ThreadPoolExecutor(3)
+
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -70,7 +73,7 @@ class BaseHandler(tornado.web.RequestHandler):
                             "message": self._reason,
                         })
 
-class BookIndexHandler(BaseHandler):
+class BookMainHandler(BaseHandler):
     """
         主页
     """
@@ -78,10 +81,11 @@ class BookIndexHandler(BaseHandler):
     def get(self, index):
 
         _tag = yield self.db.tags.find().to_list(None)
-        _analyze = yield self.db.analyze.find_one()
+        _analyze = yield self.db.user.count()
+
         _online = yield self.db.online.find().sort("loginAt", pymongo.DESCENDING).to_list(None)
 
-        if index == "":
+        if index == "recent":
             push_books = yield self.db.book.find({"mode": "push"}).sort("createdAt", pymongo.DESCENDING).limit(
                 BaseHandler.MAIN_LIMIT).to_list(None)
 
@@ -101,7 +105,7 @@ class BookIndexHandler(BaseHandler):
                            pymongo.DESCENDING).limit(BaseHandler.MAIN_LIMIT).to_list(None)
 
         self.render("main.html",
-                    visited = 0 if not _analyze else _analyze["visited"],
+                    visited = _analyze,
                     push_title = "最新推送图书",
                     upload_title = "最新上传图书",
                     push_books = push_books,
@@ -141,7 +145,10 @@ class PushIndexHandler(BaseHandler):
             _pages = yield self.db.book.find({"mode": "push", "tag": cur_tag["name"]}).sort("createdAt",
                         pymongo.DESCENDING).count()
 
-        page_count = int(_pages / BaseHandler.OTHER_LIMIT)
+        if int(_pages % BaseHandler.OTHER_LIMIT) == 0:
+            page_count = int(_pages / BaseHandler.OTHER_LIMIT)
+        else:
+            page_count = int(_pages / BaseHandler.OTHER_LIMIT) + 1
 
         self.render("push.html",
                     visited = 0 if not _analyze else _analyze["visited"],
@@ -153,33 +160,24 @@ class PushIndexHandler(BaseHandler):
                     mode = "push",
                     index = index)
 
-
-    #@tornado.gen.coroutine
+    @tornado.gen.coroutine
     def post(self, book, name):
+        _uri = self.get_argument("uri", None)
 
-        self.write(book + name)
+        if _uri is not None:
+            _user = yield self.db.user.find_one({"username": tornado.escape.native_str(self.current_user)},
+                                    {"kindle_email": 1})
+            _book = yield self.db.book.find_one({"name": name})
+            if not _book or not _user:
+                self.render("error.html", error = "没有找到用户或图书不存在")
+                return
 
-        # _uri = self.get_argument("uri", None)
-        # self.write(_uri  + book + name)
+            threading.Thread(target=send_email_to_kindle, args=(_user["kindle_email"], _book["name"])).start()
 
-    #     if book == "book" and _index:
-    #         kindle_email = yield self.db.user.find_one({"username": tornado.escape.native_str(self.current_user)},
-    #                                 {"kindle_email": 1})
-    #         _book = yield self.db.book.find_one({"name": name})
-    #         if not _book:
-    #             self.render("error.html", error = "not found book")
-    #             return
-    #
-    #         push_result = yield self.push_book_handler(_book["name"], kindle_email)
-    #         if push_result == "ok":
-    #             yield self.db.user.update({"username": tornado.escape.native_str(self.current_user)},
-    #                                    {"$inc": {"push_count": 1}})
-    #         else:
-    #             self.render("error.html", error = "push book fail")
-    #             return
-    #     self.redirect(_index)
-    #
-    #
+            self.redirect(_uri)
+        else:
+            self.redirect("/main/recent")
+
     # def send_to_kindle_email(self, future, stmp_sever, password, from_email, to_email, subject):
     #
     #     envelope = Envelope(
@@ -195,21 +193,14 @@ class PushIndexHandler(BaseHandler):
     #         envelope.send(stmp_sever, login = from_email, password = password, tls = True, port = 25)
     #     except Exception as e:
     #         print(e)
-    #         future.set_future("fail")
+    #         future.set_future("no")
     #     else:
-    #         future.set_future("succssful")
-
+    #         future.set_future("yes")
 
     # @tornado.gen.coroutine
     # def push_book_handler(self, filename, kindle_email):
     #     future = concurrent.futures.Future()
-    #     stmp_sever = "stmp.126.com"
-    #     from_email = "zqkinlde@126.com"
-    #     password = "qiu63876092"
-    #     subject = filename
-    #
-    #     threading.Thread(target=self.send_to_kindle_email,
-    #                      args=(future, stmp_sever, password, from_email, kindle_email, subject)).start()
+    #     threading.Thread(target=send_email_to_kindle, args=(future, kindle_email, filename)).start()
     #     return future
 
 class UploadIndexHandler(BaseHandler):
@@ -221,7 +212,7 @@ class UploadIndexHandler(BaseHandler):
 
         _tag = yield self.db.tags.find().to_list(None)
 
-        _analyze = yield self.db.analyze.find_one()
+        _analyze = yield self.db.user.count()
         _online = yield self.db.online.find().sort("loginAt", pymongo.DESCENDING).to_list(None)
 
 
@@ -245,10 +236,13 @@ class UploadIndexHandler(BaseHandler):
             _pages = yield self.db.book.find({"mode": "push", "tag": cur_tag["name"]}).sort("createdAt",
                         pymongo.DESCENDING).count()
 
-        page_count = int(_pages / BaseHandler.OTHER_LIMIT)
+        if int(_pages % BaseHandler.OTHER_LIMIT) == 0:
+            page_count = int(_pages / BaseHandler.OTHER_LIMIT)
+        else:
+            page_count = int(_pages / BaseHandler.OTHER_LIMIT) + 1
 
         self.render("upload.html",
-                    visited = 0 if not _analyze else _analyze["visited"],
+                    visited = _analyze,
                     online = _online,
                     tags= _tag,
                     page_count = page_count,
@@ -259,33 +253,42 @@ class UploadIndexHandler(BaseHandler):
                    )
 
 
-   # @tornado.gen.coroutine
+    @tornado.gen.coroutine
     def post(self, book, name):
 
-        _uri = self.get_argument("uri", None)
-        self.write(_uri)
+        upload_book = yield self.db.book.find_one({"name": name})
+        if upload_book["mode"] == "upload":
+            self.render("error.html", error = "图书已存在！")
+            return
 
-        # file = self.request.files["book_file"][0]
-        #
-        # upload_path = os.path.join(self.settings["static_path"], "book")
-        # if not os.path.exists(upload_path):
-        #     os.mkdir(upload_path)
-        #
-        # file_name = file["filename"]
-        # m = hashlib.md5()
-        # m.update(file_name.encode("utf-8"))
-        # img = m.hexdigest() + "." + file_name.split(".")[-1]
-        #
-        # with open(os.path.join(upload_path, img), 'wb') as up:
-        #     up.write(file['body'])
-        #
-        # yield self.db.user.update({"username": tornado.escape.native_str(self.current_user)}, {"$inc": {"upload_count":1}})
-        # yield self.db.book.update({"name": name}, {"$set": {"mode": "push"}})
-        #
-        # if not self.current_user:
-        #     self.redirect(self.request.protocol + "://" + self.request.host + "/auth/login")
-        # else:
-        #     self.redirect(uri)
+        _uri = self.get_argument("uri", None)
+        file = self.request.files.get("book_file", None)
+        if not file or len(file) < 1:
+            self.render("error.html", error = "请添加图书")
+            return
+
+        file = file[0]
+        book_name = file.get("filename", None)
+        if not book_name:
+            self.render("error.html", error = "图书不存在")
+            return
+
+        upload_path = os.path.join(self.settings["static_path"], "book")
+        if not os.path.exists(upload_path):
+            os.mkdir(upload_path)
+
+        with open(os.path.join(upload_path, book_name), 'wb') as up:
+            up.write(file['body'])
+
+        yield self.db.user.update({"username": tornado.escape.native_str(self.current_user)}, {"$inc": {
+            "upload_count": 1}})
+        yield self.db.book.update({"name": name}, {"$set": {"mode": "push"}})
+
+        if os.path.isfile(os.path.join(upload_path, book_name)):
+            self.redirect(_uri)
+        else:
+            self.render("error.html", error = "图书上传失败")
+
 
 class PartLineModlue(tornado.web.UIModule):
     """
@@ -398,7 +401,7 @@ class LoginHandlder(BaseHandler):
             })
 
             self.set_secure_cookie("test", user["username"])
-            self.redirect("/main/")
+            self.redirect("/main/recent")
         else:
             self.render("login.html", error="密码错误")
 
@@ -408,8 +411,7 @@ class LogoutHandler(BaseHandler):
     """
     def get(self):
         self.clear_cookie("test")
-        self.redirect("/main/")
-
+        self.redirect("/main/recent")
 
 class UsernameHandler(BaseHandler):
     """
@@ -442,6 +444,53 @@ class UsernameHandler(BaseHandler):
             yield self.db.user.update({"_id": uuid.uuid5(uuid.NAMESPACE_DNS, name)}, {"$set": user})
         self.redirect("/username/" + name)
 
+
+class AvatarHandler(BaseHandler):
+
+    @tornado.gen.coroutine
+    def post(self, name):
+        _uri  = self.get_argument("uri", "None")
+        file = self.request.files["avatar_file"][0]
+        if not file:
+            self.render("error.html", error = "上传头像失败")
+            return
+
+        upload_path = os.path.join(self.settings["static_path"], "photo")
+        if not os.path.exists(upload_path):
+            os.mkdir(upload_path)
+
+        file_name = file["filename"]
+
+        m = hashlib.md5()
+        m.update(file_name.encode("utf-8"))
+        img_name = m.hexdigest() + "." + file_name.split(".")[-1]
+        img_path = os.path.join(upload_path, img_name)
+        with open(img_path, 'wb') as up:
+            up.write(file['body'])
+
+        im = Image.open(img_path)
+        im_reszie = im.resize((100, 100), Image.ANTIALIAS)
+        im_reszie.save(img_path)
+
+        yield self.db.user.update({"username": tornado.escape.native_str(self.current_user)},
+                                  {"$set": {"photo": "photo/" + img_name }})
+        yield self.db.online.update({"username": tornado.escape.native_str(self.current_user)},
+                                    {"$set": {"photo": "photo/" + img_name,
+                                               "loginAt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),}})
+
+        if not _uri:
+            self.redirect("/main/recent")
+        self.redirect(_uri)
+
+class BookHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self, name):
+
+        _book = yield  self.db.book.find_one({"name": name})
+        self.render("book.html",
+                    book = _book,
+                    )
+
 class Application(tornado.web.Application):
     def __init__(self):
 
@@ -452,12 +501,14 @@ class Application(tornado.web.Application):
             (r"/auth/logout", LogoutHandler),
             (r"/auth/register", RegisterHandler),
 
-            (r"/main/(.*)", BookIndexHandler),
+            (r"/main/(.*)", BookMainHandler),
 
             (r"/push/(.*)/(.*)", PushIndexHandler),
             (r"/upload/(.*)/(.*)", UploadIndexHandler),
             (r"/username/(.*)", UsernameHandler),
             (r"/admin/(.*)", AdminHandler),
+            (r"/photo/(.*)", AvatarHandler),
+            (r"/book/(.*)", BookHandler),
         ]
 
         settings = {
@@ -491,7 +542,6 @@ class AdminHandler(BaseHandler):
             author = self.get_argument("author", None)
             tag = self.get_argument("tag", None)
             mode = self.get_argument("mode", None)
-            type = self.get_argument("type", None)
 
             file = self.request.files["img"]
             if not file:
@@ -518,9 +568,10 @@ class AdminHandler(BaseHandler):
             im_reszie = im.resize((170, 150), Image.ANTIALIAS)
             im_reszie.save(file_img)
 
-            self.add_book(img, author, name, tag, mode, type)
-            self.write({"name": name, "author": author, "mode": mode, "tag": tag, "type": type,
+            self.add_book(img, author, name, tag, mode)
+            self.write({"name": name, "author": author, "mode": mode, "tag": tag,
                         "img": img, "content_type": content_type})
+
         elif post_type == "tag":
             index = self.get_argument("index", None)
             name = self.get_argument("name", None)
@@ -532,9 +583,8 @@ class AdminHandler(BaseHandler):
             self.write({"collection": colletion, "status": self.drop_collection()})
         self.flush()
 
-    def add_book(self, img, author, name, tag, mode, type):
+    def add_book(self, img, author, name, tag, mode):
         self.db.book.insert({
-            "type": type,
             "img": "image/" + img,
             "author": author,
             "name": name,
@@ -549,10 +599,6 @@ class AdminHandler(BaseHandler):
             "name": name,
         })
 
-    def clear_zero_analyze(self):
-        result = self.db.analyze.insert({"visited": 0})
-        return "no" if not result else "yes"
-
     def drop_collection(self, col):
         reslut = ""
         if col == "tags":
@@ -564,21 +610,15 @@ class AdminHandler(BaseHandler):
         elif col == "online":
             self.db.online.drop()
             reslut = "drop online"
-        elif col == "analyze":
-            self.db.analyze.drop()
-            reslut = "analyze"
         return reslut
 
-    def create_collection(self, coll, size, max, flag):
+    def create_collection(self, coll="online", size=1024, max=6, flag = True):
         self.db.create_collection(coll, size = size, max = max, capped = flag)
 
-    def create_analyze(self, coll):
-        self.db.create_collection(coll)
 
 if __name__ == "__main__":
-    options.parse_command_line()
 
+    options.parse_command_line()
     http_server = HTTPServer(Application())
     http_server.listen(options.port)
-
     tornado.ioloop.IOLoop.current().start()

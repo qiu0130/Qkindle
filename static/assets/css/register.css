@@ -104,6 +104,9 @@
   color: white;
 }
 
+#register-info p {
+  color: gray;
+}
 
 #register-info h2 {
 	font-family: 'Raleway', sans-serif;

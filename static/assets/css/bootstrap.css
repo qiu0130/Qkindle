@@ -843,6 +843,7 @@ pre code {
 .col-lg-4,
 .col-lg-5,
 .col-lg-6,
+.col-lg-book,
 .col-lg-7,
 .col-lg-8,
 .col-lg-9,
@@ -1250,6 +1251,7 @@ pre code {
   .col-lg-4,
   .col-lg-5,
   .col-lg-6,
+  .col-lg-book,
   .col-lg-7,
   .col-lg-8,
   .col-lg-9,
@@ -1282,6 +1284,9 @@ pre code {
   }
   .col-lg-6 {
     width: 50%;
+  }
+  .col-lg-book {
+    width: 60%;
   }
   .col-lg-7 {
     width: 58.333333333333336%;

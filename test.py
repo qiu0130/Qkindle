@@ -157,43 +157,34 @@ def make_img(filepath):
 from envelopes import Envelope
 import os
 
-envelope = Envelope(
-    from_addr=(u'zqkindle@126.com', u"from qiu"),
-    to_addr=(u'qiu150905@gmail.com', u"to qiu0130"),
-    subject=u"book",
-    text_body=u"test"
-)
-
-envelope.add_attachment(os.path.join(os.getcwd(), "README.md"))
-
-# Send the envelope using an ad-hoc connection...
-envelope.send('smtp.126.com', login='zqkindle@126.com',
-              password='qiu63876092', tls=True, port = 25)
-
-print("...end")
-
-
-def send_to_kindle_email(stmp_sever, lg, pwd, from_email, from_text, to_email, to_text, subject, text):
+def send_kindle_book(kindle_email):
     envelope = Envelope(
-        from_addr= (from_email, from_text),
-        to_addr=(to_email, to_text),
-        subject = subject,
-        text_body = text,
+        from_addr=(u'zqkindle@126.com', u"from qiu"),
+        to_addr=(kindle_email, u"to qiu0130"),
+        subject=u"book",
+        text_body=u"test"
     )
+
     envelope.add_attachment(os.path.join(os.getcwd(), "README.md"))
 
+    # Send the envelope using an ad-hoc connection...
     try:
-        envelope.send(stmp_sever, login = lg, password = pwd, tls = True, port = 25)
+        envelope.send('smtp.126.com', login='zqkindle@126.com',
+              password='qiu63876092', tls=True, port = 25)
     except Exception as e:
+
         print(e)
-
-    print("end...")
-
+    else:
+        print("end..")
 
 
 if __name__ == "__main__":
-    send_to_kindle_email("stmp.126.com", "zqkindle@126.com", "qiu63876092", "zqkindle@126.com", "from qiu",
-                         "1051704885@qq.com", "to qiu", "test 126", "..end")
+    import threading
+    threading.Thread(target=send_kindle_book, args = (u"1051704885@qq.com", )).start()
+
+
+
+
 
 
 

@@ -80,12 +80,12 @@ $(document).ready(function () {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/main/">
+          <a class="navbar-brand" href="/main/recent">
               <img src="{{ static_url("assets/img/logo30.png") }}" alt=""> Kindle Push </a>
         </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/main/"><i class="icon-home icon-white"></i> 首页 </a></li>
+              <li class="active"><a href="/main/recent"><i class="icon-home icon-white"></i> 首页 </a></li>
 
               <li><a href="/push/recent/1"><i class="icon-calendar icon-white"></i> 推送图书 </a></li>
               <li><a href="/upload/recent/1"><i class="icon-th icon-white"></i> 上传图书　</a></li>
@@ -112,6 +112,5 @@ $(document).ready(function () {
      {% block footer %}
     　　<!-- add footer-->
      {% end %}
-
 
 </body></html>
