@@ -1,0 +1,140 @@
+<!doctype html public "-//w3c//dtd xhtml 1.0 transitional//en" "http://www.w3.org/tr/xhtml1/dtd/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+
+     <meta charset="utf-8">
+    <title>BLOCKS - Bootstrap Dashboard Theme</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Carlos Alvarez - Alvarez.is">
+
+    <!-- Le styles -->
+    <link href="/static/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/assets/css/main.css" rel="stylesheet">
+    <link href="/static/assets/css/font-style.css" rel="stylesheet">
+    <link href="/static/assets/css/flexslider.css" rel="stylesheet">
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144"
+          href="static/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114"
+          href="static/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="static/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="static/assets/ico/apple-touch-icon-57-precomposed.png">
+
+  	<!-- Google Fonts call. Font Used Open Sans & Raleway -->
+	<link href="http://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css">
+  	<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+
+<script type="text/javascript">
+$(document).ready(function () {
+
+    $("#btn-blog-next").click(function () {
+      $('#blogCarousel').carousel('next')
+    });
+     $("#btn-blog-prev").click(function () {
+      $('#blogCarousel').carousel('prev')
+    });
+
+     $("#btn-client-next").click(function () {
+      $('#clientCarousel').carousel('next')
+    });
+     $("#btn-client-prev").click(function () {
+      $('#clientCarousel').carousel('prev')
+    });
+
+});
+
+ $(window).load(function(){
+
+    $('.flexslider').flexslider({
+        animation: "slide",
+        slideshow: true,
+        start: function(slider){
+          $('body').removeClass('loading');
+        }
+    });
+});
+
+</script>
+
+
+
+<script type="text/javascript">
+
+function validate_fileupload(target) {
+
+
+ var uploadedFile = document.getElementById('upload');
+    var fileSize = uploadedFile.files[0].size;
+    var size = fileSize / 1024;
+    if (size > 2000) {
+    	 alert("图书不能大于2M");
+    	target.value = "";
+    	 return ;
+    }
+    var file_type = new Array("pdf","mobi","azw");
+    var file_name = target.value.split('.').pop();
+
+
+    if (file_type[0] == file_name || file_type[1] == file_name || file_type[2] == file_name) {
+    		  alert("上传成功！");
+    		  return;
+    } else {
+
+    		alert("图书仅支持.pdf、.mobi、.azw格式");
+    		 target.value = "";
+    		  return;
+    }
+
+}
+</script>
+
+
+</head>
+<body>
+
+	<!--<input type="file" id = "upload" name="fileUpload" onchange="validate_fileupload(this);">-->
+
+
+<!--<select onchange="location = this.options[this.selectedIndex].value;">-->
+    <!--<option>Please select</option>-->
+    <!--<option value="http://www.apple.com/">Apple</option>-->
+    <!--<option value="http://www.bbc.com">BBC</option>-->
+    <!--<option value="http://www.facebook.com">Facebook</option>-->
+<!--</select>?-->
+
+
+
+
+ 	  		<!-- MODAL BLOCK -->
+				<div class="half-unit">
+	      		<dtitle>Modal</dtitle>
+	      		<hr>
+		            <div class="cont">
+		                <a href="#myModal" role="button" class="btnnew" data-toggle="modal">Example Modal Window</a>
+		            </div>
+				</div>
+			</div>
+
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,62 @@
+
+<div class="col-sm-3 col-lg-3">
+
+	<div class="dash-unit">
+		<dtitle>{{ book["tag"] }} </dtitle>
+		<hr>
+		<div class="thumbnail">
+		<form method="post" action="/book/{{ book["name"] }}">
+			      {% module xsrf_form_html() %}
+			      <input type="hidden" name = "uri" value="{{ request.uri }}">
+			    <button type="submit"> <img src="{{ static_url(book["img"]) }}" alt="Marcel Newman"> </button>
+
+				</form>
+		</div><!-- /thumbnail -->
+
+		<h1>  {{ book["name"][:9] }}
+					{% if len(book["name"]) > 9 %}
+						..
+					{% end %}
+		</h1>
+		<h3> {{ book["author"][:9] }}
+					{% if len(book["author"]) > 9 %}
+						..
+					{% end %}
+		</h3>
+
+        <div class="cont">
+             <a href="#modal-{{ str(book["_id"]) }}" role="button" class="btnnew" data-toggle="modal" onclick="user_check();">
+				 上传图书
+			 </a>
+        </div>
+    </div>
+		  <!-- Modal -->
+			  <div class="modal fade" id="modal-{{ str(book["_id"]) }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				   aria-hidden="true">
+			    <div class="modal-dialog">
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <h4 class="modal-title"> {{ book["name"] }} </h4>
+			        </div>
+					  <div class="modal-body">
+			           简介：{{ escape(book["desc"]) }}
+			         </div>
+
+			        <div class="modal-footer">
+                        <form enctype="multipart/form-data" method="post" action="/upload/book/{{ book["name"] }}">
+                            {% module xsrf_form_html() %}
+                            <input type="file" name = "book_file" id="{{ str(book["_id"]) }}" onchange="validate_book_upload(this.id, this);"/>
+							<input type="hidden" name = "uri" value="{{ request.uri }}">
+
+						   <button class="btn btn-default" type="submit"> 上传 </button>
+
+						</form>
+			       　</div>
+
+			      </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			  </div><!-- /.modal -->
+
+</div>
+
+

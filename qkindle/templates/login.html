@@ -1,0 +1,61 @@
+
+{% extends "base.html" %}
+
+
+{% block head %}
+
+<link href="{{ static_url("assets/css/login.css") }}" rel="stylesheet">
+
+<style type="text/css">
+      body {
+        padding-top: 30px;
+      }
+    </style>
+
+{% end %}
+
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="row">
+   		<div class="col-lg-offset-4 col-lg-4" style="margin-top:100px">
+   			<div class="block-unit" style="text-align:center; padding:8px 8px 8px 8px;">
+   				<img src="{{ static_url("assets/img/logo.png") }}"  alt="" class="img-circle">
+				<br>
+
+   				<br>
+					<form class="cmxform" id="signupForm" method="post" action="/auth/login">
+						<fieldset>
+							<p>
+								<input id="username" name="username" type="text" placeholder="Username">
+								<br>
+
+								<input id="password" name="password" type="password" placeholder="Password">
+							</p>
+
+						    {% if error %}
+								<span style="color: red">Error: {{ error }}</span>
+							{% end %}
+
+							<br>
+								<button class="submit btn-success btn btn-large" type="submit">Login</button>
+							    	{% module xsrf_form_html() %}
+						</fieldset>
+					</form>
+   			</div>
+
+   		 </div>
+
+
+        </div>
+    </div>
+
+{% end %}
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--<script type="text/javascript" src="assets/js/bootstrap.js"></script>-->

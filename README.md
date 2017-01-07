@@ -1,15 +1,11 @@
 
-# Kindle 在线分享网站
+# qkindle
 
-> 后台基于`tornado`，`Mongodb`存储，前端页面采用`bootstrap`，主要功能:推送和上传`.mobi、.azw`图书
+> 基于`tornado`开发的`kindle`图书**Push**系统
 
-
-### 环境
-
-> `Python3.5.1 + Tornado4.2.1`
-
-### 其他
-
+## Feature
++ 。。
+## License
 The MIT License
 
 

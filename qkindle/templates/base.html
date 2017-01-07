@@ -1,0 +1,117 @@
+<!doctype html>
+<html><head>
+    <meta charset="utf-8">
+    <title>　kindle push </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Carlos Alvarez - Alvarez.is">
+
+
+    <link rel="shortcut icon" href="{{ static_url("assets/img/logo.png") }}" />
+    <!-- Le styles -->
+    <link href="{{ static_url("assets/css/bootstrap.css") }}" rel="stylesheet">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="{{ static_url("assets/js/bootstrap.js") }}" ></script>
+
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <!--<link rel="shortcut icon" href="assets/ico/favicon.ico">-->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">-->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">-->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">-->
+    <!--<link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">-->
+
+  	<!-- Google Fonts call. Font Used Open Sans & Raleway -->
+	<link href="http://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css">
+  	<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+
+    $("#btn-blog-next").click(function () {
+      $('#blogCarousel').carousel('next')
+    });
+     $("#btn-blog-prev").click(function () {
+      $('#blogCarousel').carousel('prev')
+    });
+
+     $("#btn-client-next").click(function () {
+      $('#clientCarousel').carousel('next')
+    });
+     $("#btn-client-prev").click(function () {
+      $('#clientCarousel').carousel('prev')
+    });
+
+});
+
+ $(window).load(function(){
+    $('.flexslider').flexslider({
+        animation: "slide",
+        slideshow: true,
+        start: function(slider){
+          $('body').removeClass('loading');
+        }
+    });
+});
+
+</script>
+
+
+    {% block head %}
+        <!-- add head -->
+    {% end %}
+
+  </head>
+
+<body>
+
+  	<!-- NAVIGATION MENU -->
+    <div class="navbar-nav navbar-inverse navbar-fixed-top">
+        <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/main/recent">
+              <img src="{{ static_url("assets/img/logo30.png") }}" alt=""> Kindle Push </a>
+        </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class = "active"><a href="/main/recent"><i class="icon-home icon-white"></i> 首页 </a></li>
+
+              <li><a href="/push/recent/1"><i class="icon-calendar icon-white"></i> 推送图书 </a></li>
+              <li><a href="/upload/recent/1"><i class="icon-th icon-white"></i> 上传图书　</a></li>
+
+
+                {% if current_user %}
+                 <li><a href="/username/{{ current_user }}"><i class="icon-user icon-white"></i>
+                     {{ escape(current_user) }}</a></li>
+                 <li><a href="/auth/logout"><i class="icon-lock icon-white"></i> 退出　</a></li>
+                {% else %}
+                 <li><a href="/auth/login"><i class="icon-lock icon-white"></i> 登录　</a></li>
+                 <li><a href="/auth/register"><i class="icon-lock icon-white"></i> 注册　</a></li>
+                {% end %}
+                 <li><a href="/main/notice"><i class="icon-th icon-white"></i> 注意事项　</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+    </div>
+
+
+      {% block body %}
+        <!-- add body -->
+      {% end %}
+
+     {% block footer %}
+    　　<!-- add footer-->
+     {% end %}
+
+</body></html>

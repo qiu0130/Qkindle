@@ -1,0 +1,40 @@
+{% extends "base.html"  %}
+
+
+{% block head %}
+
+<!--<link href="{{ static_url("assets/css/register.css") }}" rel="stylesheet">-->
+<link href="{{ static_url("assets/css/main.css") }}" rel="stylesheet">
+<link href="{{ static_url("assets/css/font-style.css") }}"  rel="stylesheet">
+<link href="{{ static_url("assets/css/flexslider.css") }}" rel="stylesheet">
+<!--<link href="{{ static_url("assets/css/login.css") }}" rel="stylesheet">-->
+
+<style type="text/css">
+      body {
+        padding-top: 60px;
+        background-color: #CCE8CF;
+      }
+</style>
+
+{% end %}
+
+{% block body %}
+
+<div style="clear:left;">
+<h2>　<a href="{{ uri }}"> ←返回　</a></h2></div>
+
+<div class="col-lg-offset-4 col-lg-4" style="margin-top:50px; align="center">
+<div class="cont">
+    <div class="thumbnail">
+        <img src="{{ static_url(book["img"]) }}" alt="Marcel Newman" >
+
+    </div><!-- /thumbnail -->
+    <h2> {{ book["name"] }} </h2>
+        <ok> {{ book["author"] }}　</ok>
+        <br>
+        <p> 简介：{{ escape(book["desc"]) }}</p>
+    </div>
+    <br>
+
+</div>
+{% end %}
